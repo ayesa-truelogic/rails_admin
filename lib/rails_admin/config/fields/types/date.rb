@@ -8,7 +8,7 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @format = :long
+          @format = :default
           @i18n_scope = [:date, :formats]
           @js_plugin_options = {
             "showTime" => false,

@@ -9,7 +9,7 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types::register(self)
 
-          @format = :long
+          @format = :default
           @i18n_scope = [:time, :formats]
           @js_plugin_options = {}
 
@@ -99,8 +99,8 @@ module RailsAdmin
               },
               "timepicker" => {
                 "amPmText" => meridian_indicator? ? ["Am", "Pm"] : ["", ""],
-                "hourText" => I18n.t("datetime.prompts.hour", :default => I18n.t("datetime.prompts.hour", :locale => :en)),
-                "minuteText" => I18n.t("datetime.prompts.minute", :default => I18n.t("datetime.prompts.minute", :locale => :en)),
+                "hourText" => I18n.t("datetime.prompts.hour", :default => I18n.t("datetime.prompts.hour", :locale => :es)),
+                "minuteText" => I18n.t("datetime.prompts.minute", :default => I18n.t("datetime.prompts.minute", :locale => :es)),
                 "showPeriod" => meridian_indicator?,
                 "value" => formatted_time_value,
               }
@@ -114,8 +114,8 @@ module RailsAdmin
           def localized_format(scope = [:time, :formats])
             format = date_format.to_sym
             I18n.t(format, :scope => scope, :default => [
-              I18n.t(format, :scope => scope, :locale => :en),
-              I18n.t(self.class.format, :scope => scope, :locale => :en),
+              I18n.t(format, :scope => scope, :locale => :es),
+              I18n.t(self.class.format, :scope => scope, :locale => :es),
             ]).to_s
           end
 
