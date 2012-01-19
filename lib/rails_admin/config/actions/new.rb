@@ -19,6 +19,7 @@ module RailsAdmin
             if request.get? # NEW
               
               @object = @abstract_model.new
+              @object.only_when_new if @object.respond_to?(:only_when_new)
               @authorization_adapter && @authorization_adapter.attributes_for(:new, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end

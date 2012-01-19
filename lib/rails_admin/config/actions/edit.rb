@@ -13,10 +13,12 @@ module RailsAdmin
         end
         
         register_instance_option :controller do
+
           Proc.new do
-            
+
             if request.get? # EDIT
 
+              @object.only_when_edit if @object.respond_to?(:only_when_edit)
               respond_to do |format|
                 format.html { render @action.template_name }
                 format.js   { render @action.template_name, :layout => false }
