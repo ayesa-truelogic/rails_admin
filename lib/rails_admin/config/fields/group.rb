@@ -55,6 +55,10 @@ module RailsAdmin
           (@label ||= {})[::I18n.locale] ||= (parent.fields.find{|f|f.name == self.name}.try(:label) || name.to_s.humanize)
         end
 
+        register_instance_option :display_toggle_link do
+           false
+        end
+
         # Configurable help text
         register_instance_option :help do
           nil

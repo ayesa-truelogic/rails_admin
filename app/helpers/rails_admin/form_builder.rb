@@ -19,17 +19,25 @@ module RailsAdmin
         (options[:nested_in] ? '' : @template.render(:partial => 'submit_buttons'))
     end
 
+    def show_records?(fields)
+      for field in fields
+        registros = @object.send(field.name)
+        return 'block' if registros.detect{|r| !r.valor.blank? }
+      end
+      return 'none'
+    end
+
     def fieldset_for fieldset, nested_in
+      fieldset_id = fieldset.label.delete(' ').delete('/').underscore
       if (fields = fieldset.with(:form => self, :object => @object, :view => @template).visible_fields).length > 0
-        html = @template.content_tag :fieldset do
+        shown_or_hidden = fieldset.display_toggle_link ? show_records?(fields) : 'block'
+        html = @template.content_tag(:fieldset, :id => fieldset_id, :style => "display: #{shown_or_hidden};") do
           @template.content_tag(:legend, fieldset.label.html_safe + (fieldset.help.present? ? @template.content_tag(:small, fieldset.help) : ''), :style => "#{fieldset.label == I18n.translate("admin.new.basic_info") ? 'display:none' : ''}") +
             fields.map{ |field| field_wrapper_for(field, nested_in) }.join.html_safe
         end
       end
-      hidden_field = fields.find  {|f| f.css_class == 'hidden' }
-      if hidden_field
-        association_name = "#{dom_id(hidden_field)}_field"
-        toggle_association_link = @template.render(:partial => 'toggle_association_link', :locals => { :link_name => fieldset.label, :association_name => association_name }).to_s
+      if fieldset.display_toggle_link
+        toggle_association_link = @template.render(:partial => 'toggle_association_link', :locals => { :link_name => fieldset.label, :association_name => fieldset_id }).to_s
       else
         toggle_association_link = ""
       end
@@ -113,4 +121,5 @@ module RailsAdmin
       (@dom_name ||= {})[field.name] ||= "#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Types::HasManyAssociation) ? '[]' : ''}"
     end
   end
+
 end
