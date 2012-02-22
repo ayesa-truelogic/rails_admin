@@ -51,8 +51,7 @@ module RailsAdmin
         # do not show nested field if the target is the origin
         unless field.inverse_of.presence && field.inverse_of == nested_in
           @template.content_tag(:div, :class => "clearfix field #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", :id => "#{dom_id(field)}_field") do
-            label(field.method_name, field.label, :class => (field.nested_form ? 'nester input' : '')) +
-              (field.nested_form ? nested_inputs_for(field) : input_for(field))
+            field.nested_form ? nested_inputs_for(field) : if !field.label.blank? then label(field.method_name, field.label, :class => (field.nested_form ? 'nester input' : '')) + input_for(field) else input_for(field) end
           end
         end
       end
